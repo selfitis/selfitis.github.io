@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Future Engineer Portfolio</title>
+    <meta name="description" content="Portfolio of Zekeriyya Said Altay, a 13-year-old future systems architect with Linux, Python, and Raspberry Pi expertise.">
+    <meta name="keywords" content="Linux, Python, C++, Raspberry Pi, Portfolio, Engineering, Student">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -23,7 +25,6 @@
             overflow-x: hidden;
         }
 
-        /* Giriş Animasyonu */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -37,13 +38,20 @@
             align-items: center;
             background: radial-gradient(circle at center, #393e46 0%, #222831 100%);
             animation: fadeInUp 1s ease-out;
+            text-align: center;
         }
 
-        h1 { font-size: 3.5rem; color: var(--primary-cyan); margin: 0; text-shadow: 0 0 15px rgba(0, 173, 181, 0.3); }
+        h1 { 
+            font-size: clamp(2rem, 5vw, 3.5rem); 
+            color: var(--primary-cyan); 
+            margin: 0; 
+            text-shadow: 0 0 15px rgba(0, 173, 181, 0.3); 
+        }
+
+        .subtitle { font-size: 1.2rem; color: #888; }
 
         .container { width: 85%; max-width: 1100px; margin: auto; padding: 50px 0; }
 
-        /* Kartlar ve Etkileşim */
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 40px; }
 
         .card {
@@ -60,7 +68,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        /* İnteraktif Butonlar */
         .btn-container {
             display: flex;
             justify-content: center;
@@ -80,22 +87,14 @@
             font-size: 1.1rem;
         }
 
-        .pi-btn {
-            background-color: #c51a4a; /* Raspberry Pi Kırmızısı */
-            color: white;
-        }
-
-        .micro-btn {
-            background-color: #ffffff;
-            color: #ed1c24; /* Micro Center Logosu Rengi */
-        }
+        .pi-btn { background-color: #c51a4a; color: white; }
+        .micro-btn { background-color: #ffffff; color: #ed1c24; }
 
         .dream-btn:hover {
             transform: scale(1.1);
             box-shadow: 0 0 20px rgba(255,255,255,0.2);
         }
 
-        /* Yetenek Etiketleri Animasyonu */
         .skill-tag {
             display: inline-block;
             background: var(--primary-cyan);
@@ -109,18 +108,17 @@
 
         .skill-tag:hover {
             background: white;
-            transform: rotate(-5deg);
+            transform: scale(1.1) rotate(-5deg);
         }
 
         footer { text-align: center; padding: 60px 0; opacity: 0.7; }
-
     </style>
 </head>
 <body>
 
     <header>
         <h1>Future Systems Architect</h1>
-        <p style="font-size: 1.2rem; color: #888;">Linux Explorer | C++ & Python Dev | Ankara, TR</p>
+        <p class="subtitle">Linux Explorer | C++ & Python Dev | Ankara, TR</p>
     </header>
 
     <div class="container">
@@ -136,31 +134,40 @@
         <section class="grid">
             <div class="card">
                 <h3>The 14 OS Journey</h3>
-                <p>From Ubuntu to windows Xp, I have experimented with 13 different operating systems</p>
+                <p>From Ubuntu to Windows XP, I have experimented with 13 different operating systems.</p>
             </div>
             <div class="card">
-                <h3>Cambridge request</h3>
+                <h3>Cambridge Request</h3>
                 <p>I want to shape the future of software by joining one of the world's most prestigious engineering schools.</p>
             </div>
         </section>
-         <div class="card">
-                <h3>General CV</h3>
-                <p>Selfitis (Zekeriyya Said Altay) A 13-year-old tech enthusiast with in-depth technical experience in hardware modification and system administration. He works on complex operating systems, hardware assembly, and embedded systems through a self-learning discipline. Instead of rote learning models, he adopts a problem-solving-oriented and applied engineering approach. TECHNICAL SKILLS Operating Systems: Experience with installation, configuration, and optimization on 7 different Linux distributions (including Ubuntu), 5 Windows versions, Android, and iOS platforms. Hardware and Embedded Systems: Active project development expertise on Raspberry Pi 4B+, Raspberry Pi Zero, and Arduino hardware. Software and Programming: Data processing and automation scripts with Python, functional hardware control with C++, and Git version control system usage. Design and Modification: Keyboard design and physical modification of computer components, purpose-built assembly of hardware parts. PROJECT EXPERIENCES AND ACHIEVEMENTS BILSEM Project Presentation (Invited): Invited to a special project presentation due to technical application skills exceeding academic exam limits. System Analysis: Performed performance comparisons between different operating systems and developed practical solutions for hardware-software compatibility. Learning Discipline: Despite lacking a technical mentor, learned to use advanced technology tools (Linux terminal, C++ libraries) through documentation review, forum research, and trial-and-error methods. PERSONAL SKILLS Algorithmic Thinking: Ability to solve complex technical problems by breaking them down into smaller parts. Adaptation: Ability to quickly grasp newly released hardware and software tools and integrate them into projects.</p>
-            </div>
+
+        <section class="card">
+            <h3>General CV</h3>
+            <ul>
+                <li><strong>Name:</strong> Zekeriyya Said Altay (Selfitis), 13-year-old tech enthusiast</li>
+                <li><strong>Operating Systems:</strong> 7 Linux distros, 5 Windows versions, Android, iOS</li>
+                <li><strong>Hardware:</strong> Raspberry Pi 4B+, Raspberry Pi Zero, Arduino</li>
+                <li><strong>Programming:</strong> Python, C++, Git</li>
+                <li><strong>Design & Modification:</strong> Keyboard design, hardware assembly</li>
+                <li><strong>Projects:</strong> BILSEM Project Presentation, OS performance analysis</li>
+                <li><strong>Learning Discipline:</strong> Self-taught via documentation, forums, trial-and-error</li>
+                <li><strong>Personal Skills:</strong> Algorithmic thinking, adaptation to new tools</li>
+            </ul>
         </section>
+
         <section style="margin-top: 80px; text-align: center;">
             <h2 style="color: var(--primary-cyan);">Visit My Destinations</h2>
             <p>Direct links to the places that fuel my dreams:</p>
-            
             <div class="btn-container">
-                <a href="https://www.raspberrypi.com/" target="_blank" class="dream-btn pi-btn">
-                    Visit Raspberry Pi Foundation
-                </a>
-
-                <a href="https://www.microcenter.com/" target="_blank" class="dream-btn micro-btn">
-                    Explore Micro Center
-                </a>
+                <a href="https://www.raspberrypi.com/" target="_blank" class="dream-btn pi-btn">Visit Raspberry Pi Foundation</a>
+                <a href="https://www.microcenter.com/" target="_blank" class="dream-btn micro-btn">Explore Micro Center</a>
             </div>
+        </section>
+
+        <section style="margin-top: 80px; text-align: center;">
+            <h2 style="color: var(--primary-cyan);">Contact Me</h2>
+            <p>Find me on <a href="https://github.com/selfitis" target="_blank" style="color: var(--primary-cyan);">GitHub</a> or reach me via email: <a href="mailto:example@email.com" style="color: var(--primary-cyan);">example@email.com</a></p>
         </section>
     </div>
 
