@@ -3,175 +3,877 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Future Engineer Portfolio</title>
+    <title>Selfitis — Future Engineer</title>
     <meta name="description" content="Portfolio of Zekeriyya Said Altay, a 13-year-old future systems architect with Linux, Python, and Raspberry Pi expertise.">
-    <meta name="keywords" content="Linux, Python, C++, Raspberry Pi, Portfolio, Engineering, Student">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --primary-cyan: #00adb5;
-            --dark-bg: #222831;
-            --card-bg: #393e46;
-            --text-light: #eeeeee;
+            --glass-bg: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --glass-shine: rgba(255, 255, 255, 0.25);
+            --glass-shadow: rgba(0, 0, 0, 0.35);
+            --accent-1: #5ee7df;
+            --accent-2: #b490ca;
+            --accent-3: #7fd8fa;
+            --text-primary: rgba(255,255,255,0.95);
+            --text-muted: rgba(255,255,255,0.55);
         }
 
-        * { transition: all 0.3s ease; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-light);
-            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            background: #0a0e1a;
+            color: var(--text-primary);
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* ── Animated Background ── */
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
         }
 
+        #bg-particle-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            will-change: transform;
+        }
+
+        .orb-1 {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, #1a6b9a, transparent);
+            top: -150px; left: -100px;
+        }
+        .orb-2 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, #6b3fa0, transparent);
+            bottom: -100px; right: -100px;
+        }
+        .orb-3 {
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, #0d7d6e, transparent);
+            top: 40%; left: 50%;
+        }
+        .orb-4 {
+            width: 280px; height: 280px;
+            background: radial-gradient(circle, #9b5de5, transparent);
+            top: 20%; right: 20%;
+        }
+
+        /* Mouse spotlight glow */
+        .mouse-spotlight {
+            position: fixed;
+            width: 500px; height: 500px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle,
+                rgba(94,231,223,0.08) 0%,
+                rgba(94,231,223,0.03) 40%,
+                transparent 70%);
+            mix-blend-mode: screen;
+            transition: opacity 0.5s;
+        }
+
+        /* Cursor dot */
+        .cursor-dot {
+            position: fixed;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            background: var(--accent-1);
+            box-shadow: 0 0 10px rgba(94,231,223,0.8);
+            transition: transform 0.08s ease, width 0.2s, height 0.2s, opacity 0.3s;
+        }
+
+        .cursor-ring {
+            position: fixed;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border: 1.5px solid rgba(94,231,223,0.5);
+            transition: transform 0.18s ease, width 0.25s, height 0.25s, border-color 0.3s;
+        }
+
+        body:has(a:hover) .cursor-dot  { width: 14px; height: 14px; }
+        body:has(a:hover) .cursor-ring { width: 52px; height: 52px; border-color: rgba(94,231,223,0.9); }
+
+        /* Grain overlay */
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        /* ── Glass Mixin ── */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow:
+                0 8px 32px var(--glass-shadow),
+                inset 0 1px 0 var(--glass-shine);
+            position: relative;
+        }
+
+        .glass::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* ── Layout ── */
+        .page-wrap {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ── Header ── */
         header {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            background: radial-gradient(circle at center, #393e46 0%, #222831 100%);
-            animation: fadeInUp 1s ease-out;
+            justify-content: center;
+            padding: 60px 24px;
             text-align: center;
         }
 
-        h1 { 
-            font-size: clamp(2rem, 5vw, 3.5rem); 
-            color: var(--primary-cyan); 
-            margin: 0; 
-            text-shadow: 0 0 15px rgba(0, 173, 181, 0.3); 
+        .header-glass {
+            padding: 60px 70px;
+            max-width: 760px;
+            animation: riseIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
 
-        .subtitle { font-size: 1.2rem; color: #888; }
+        @keyframes riseIn {
+            from { opacity: 0; transform: translateY(50px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
 
-        .container { width: 85%; max-width: 1100px; margin: auto; padding: 50px 0; }
+        .avatar-ring {
+            width: 88px; height: 88px;
+            border-radius: 50%;
+            margin: 0 auto 28px;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            box-shadow: 0 0 30px rgba(94, 231, 223, 0.4);
+            font-size: 2.2rem;
+        }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 40px; }
+        .site-title {
+            font-size: clamp(2.4rem, 6vw, 4rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-1) 50%, var(--accent-3) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .site-tagline {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            line-height: 1.7;
+        }
+
+        .header-divider {
+            width: 50px; height: 2px;
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            margin: 24px auto;
+            border-radius: 2px;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            animation: bounceDown 2s ease-in-out infinite;
+        }
+
+        .scroll-hint::after {
+            content: '';
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--accent-1), transparent);
+        }
+
+        @keyframes bounceDown {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50%       { transform: translateX(-50%) translateY(8px); }
+        }
+
+        /* ── Sections ── */
+        .container {
+            width: min(90%, 1100px);
+            margin: 0 auto;
+            padding: 80px 0;
+        }
+
+        .section-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--accent-1);
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 36px;
+            color: #fff;
+        }
+
+        /* ── Skills ── */
+        .skills-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .skill-pill {
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: default;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #fff;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-pill::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .skill-pill:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 28px rgba(94,231,223,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+            border-color: var(--accent-1);
+            color: #0a0e1a;
+        }
+
+        .skill-pill:hover::after { opacity: 1; }
+        .skill-pill span { position: relative; z-index: 1; }
+
+        /* ── Cards ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 22px;
+            margin-top: 40px;
+        }
 
         .card {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 15px;
-            border-bottom: 4px solid transparent;
-            animation: fadeInUp 1.2s ease-out;
+            padding: 32px;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
         }
 
         .card:hover {
             transform: translateY(-10px);
-            border-bottom: 4px solid var(--primary-cyan);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow:
+                0 20px 60px rgba(0,0,0,0.4),
+                0 0 0 1px rgba(94,231,223,0.2),
+                inset 0 1px 0 var(--glass-shine);
         }
 
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #fff, var(--accent-3));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        /* ── CV Section ── */
+        .cv-card {
+            padding: 44px 48px;
+            margin-top: 24px;
+        }
+
+        .cv-list {
+            list-style: none;
+            display: grid;
+            gap: 16px;
+        }
+
+        .cv-list li {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            font-size: 0.93rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .cv-list li:last-child { border-bottom: none; padding-bottom: 0; }
+
+        .cv-key {
+            color: var(--accent-1);
+            font-weight: 600;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.78rem;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+            padding-top: 2px;
+            min-width: 140px;
+        }
+
+        /* ── Buttons ── */
         .btn-container {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-top: 50px;
+            gap: 16px;
+            margin-top: 40px;
             flex-wrap: wrap;
         }
 
         .dream-btn {
-            padding: 15px 30px;
+            padding: 14px 28px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 1.1rem;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            letter-spacing: 0.01em;
         }
 
-        .pi-btn { background-color: #ffffff; color: black; }
-        .micro-btn { background-color: #000000; color: white; }
-
-        .dream-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        .pi-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.22);
+            color: #fff;
+            backdrop-filter: blur(14px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
         }
 
-        .skill-tag {
-            display: inline-block;
-            background: var(--primary-cyan);
-            color: var(--dark-bg);
-            padding: 8px 18px;
-            border-radius: 25px;
-            margin: 5px;
-            font-weight: bold;
-            cursor: pointer;
+        .pi-btn:hover {
+            background: rgba(94,231,223,0.18);
+            border-color: var(--accent-1);
+            box-shadow: 0 0 24px rgba(94,231,223,0.3), inset 0 1px 0 rgba(255,255,255,0.22);
+            transform: translateY(-4px) scale(1.04);
         }
 
-        .skill-tag:hover {
-            background: white;
-            transform: scale(1.1) rotate(-5deg);
+        .micro-btn {
+            background: rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,255,255,0.14);
+            color: #fff;
+            backdrop-filter: blur(14px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
         }
 
-        footer { text-align: center; padding: 60px 0; opacity: 0.7; }
+        .micro-btn:hover {
+            background: rgba(180,144,202,0.22);
+            border-color: var(--accent-2);
+            box-shadow: 0 0 24px rgba(180,144,202,0.3), inset 0 1px 0 rgba(255,255,255,0.14);
+            transform: translateY(-4px) scale(1.04);
+        }
+
+        /* ── Contact ── */
+        .contact-row {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .contact-chip {
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            text-decoration: none;
+            color: rgba(255,255,255,0.85);
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.14);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            display: flex; align-items: center; gap: 7px;
+        }
+
+        .contact-chip:hover {
+            background: rgba(94,231,223,0.12);
+            border-color: var(--accent-1);
+            color: #fff;
+            transform: translateY(-3px);
+        }
+
+        /* ── Footer ── */
+        footer {
+            text-align: center;
+            padding: 60px 24px 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-line {
+            width: 40px; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-1), transparent);
+            margin: 0 auto 20px;
+        }
+
+        /* ── Fade-in on scroll ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 600px) {
+            .header-glass { padding: 40px 28px; }
+            .cv-card { padding: 28px 22px; }
+            .cv-key { min-width: 100px; }
+        }
     </style>
 </head>
 <body>
 
+<!-- Cursor elements -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="mouse-spotlight" id="spotlight"></div>
+
+<!-- Animated Background -->
+<div class="bg-canvas">
+    <canvas id="bg-particle-canvas"></canvas>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+</div>
+<div class="grain"></div>
+
+<div class="page-wrap">
+
+    <!-- Header -->
     <header>
-        <h1>Software engineer of the future:Selfitis</h1>
-        <p class="subtitle">Linux Explorer | C++ ,Bashscript & Python Dev & Hardware Projects | Ankara, TR</p>
+        <div class="glass header-glass">
+            <div class="avatar-ring">🛠</div>
+            <h1 class="site-title">Selfitis</h1>
+            <div class="header-divider"></div>
+            <p class="site-tagline">
+                Linux Explorer &nbsp;·&nbsp; C++, Bash &amp; Python Dev &nbsp;·&nbsp; Hardware Tinkerer<br>
+                <span style="color: rgba(255,255,255,0.35);">Ankara, TR</span>
+            </p>
+        </div>
+        <div class="scroll-hint">scroll</div>
     </header>
 
     <div class="container">
-        <section>
-            <h2 style="color: var(--primary-cyan);">Technical Expertise</h2>
-            <div class="skill-tag">Bash Scripting</div>
-            <div class="skill-tag">Python Development</div>
-            <div class="skill-tag">C++ Programming</div>
-            <div class="skill-tag">Raspberry Pi Hardware</div>
-        </section>
 
-        <section class="grid">
-            <div class="card">
-                <h3>The OS Journey</h3>
-                <p>From Ubuntu to Windows XP, I have experimented lot of different operating systems.</p>
-            </div>
-            <div class="card">
-                <h3>University Request</h3>
-                <p>I want to shape the future of software by joining one of the world's most prestigious engineering schools at United Kingdom.</p>
+        <!-- Skills -->
+        <section class="reveal">
+            <p class="section-label">What I work with</p>
+            <h2 class="section-title">Technical Expertise</h2>
+            <div class="skills-wrap">
+                <div class="skill-pill"><span>🐚 Bash Scripting</span></div>
+                <div class="skill-pill"><span>🐍 Python Development</span></div>
+                <div class="skill-pill"><span>⚡ C++ Programming</span></div>
+                <div class="skill-pill"><span>🍓 Raspberry Pi Hardware</span></div>
+                <div class="skill-pill"><span>🤖 Arduino</span></div>
+                <div class="skill-pill"><span>🐧 Linux Systems</span></div>
             </div>
         </section>
 
-        <section class="card" style="margin-top: 100px;">
-            <h3>General CV</h3>
-            <ul>
-                <li><strong>Name:</strong> Zekeriyya Said Altay (Selfitis), 13-year-old tech enthusiast</li>
-                <li><strong>Hardware:</strong> Raspberry Pi 4B+, Raspberry Pi Zero, Arduino</li>
-                <li><strong>Programming:</strong> Python, C++, Bash Script</li>
-                <li><strong>Design & Modification:</strong>Hardware assembly</li>
-                <li><strong>Projects:</strong> BILSEM Project Presentation, OS performance boosting,Online Tamagotchi Pet with Pi Zero</li>
-                <li><strong>Learning Discipline:</strong> Self-taught via documentation, forums, trial-and-error</li>
-                <li><strong>Personal Skills:</strong> Algorithmic thinking, adaptation to new tools</li>
-            </ul>
+        <!-- Story Cards -->
+        <section class="reveal" style="margin-top: 80px;">
+            <p class="section-label">My story</p>
+            <h2 class="section-title">The Journey</h2>
+            <div class="grid">
+                <div class="card glass">
+                    <div class="card-icon">💿</div>
+                    <h3>The OS Journey</h3>
+                    <p>From Ubuntu to Windows XP, I've experimented with a wide variety of operating systems, always chasing deeper understanding of how machines actually work.</p>
+                </div>
+                <div class="card glass">
+                    <div class="card-icon">🎓</div>
+                    <h3>University Dream</h3>
+                    <p>I want to shape the future of software by joining one of the world's most prestigious engineering schools in the United Kingdom.</p>
+                </div>
+            </div>
         </section>
 
-        <section style="margin-top: 80px; text-align: center;">
-            <h2 style="color: var(--primary-cyan);">Visit My Destinations</h2>
-            <p>Direct links to the places that fuel my dreams:</p>
+        <!-- CV -->
+        <section class="reveal" style="margin-top: 80px;">
+            <p class="section-label">Who I am</p>
+            <h2 class="section-title">General CV</h2>
+            <div class="glass cv-card">
+                <ul class="cv-list">
+                    <li>
+                        <span class="cv-key">Name</span>
+                        <span>Zekeriyya Said Altay (Selfitis), 13-year-old tech enthusiast</span>
+                    </li>
+                    <li>
+                        <span class="cv-key">Hardware</span>
+                        <span>Raspberry Pi 4B+, Raspberry Pi Zero, Arduino</span>
+                    </li>
+                    <li>
+                        <span class="cv-key">Programming</span>
+                        <span>Python, C++, Bash Script</span>
+                    </li>
+                    <li>
+                        <span class="cv-key">Design & Mod</span>
+                        <span>Hardware assembly &amp; modification</span>
+                    </li>
+                    <li>
+                        <span class="cv-key">Projects</span>
+                        <span>BILSEM Project Presentation, OS performance boosting, Online Tamagotchi Pet with Pi Zero</span>
+                    </li>
+                    <li>
+                        <span class="cv-key">Learning</span>
+                        <span>Self-taught via documentation, forums, trial-and-error</span>
+                    </li>
+                    <li>
+                        <span class="cv-key">Personal Skills</span>
+                        <span>Algorithmic thinking, adaptation to new tools</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Dream Destinations -->
+        <section class="reveal" style="margin-top: 80px; text-align: center;">
+            <p class="section-label">Fuel for the dream</p>
+            <h2 class="section-title">Visit My Destinations</h2>
+            <p style="color: var(--text-muted); font-size: 0.93rem;">Direct links to the places that inspire me:</p>
             <div class="btn-container">
-                <a href="https://www.raspberrypi.com/" target="_blank" class="dream-btn pi-btn">Visit Raspberry Pi Foundation</a>
-                <a href="https://www.microcenter.com/" target="_blank" class="dream-btn micro-btn">Explore Micro Center</a>
+                <a href="https://www.raspberrypi.com/" target="_blank" class="dream-btn pi-btn">
+                    🍓 Raspberry Pi Foundation
+                </a>
+                <a href="https://www.microcenter.com/" target="_blank" class="dream-btn micro-btn">
+                    🖥 Explore Micro Center
+                </a>
             </div>
         </section>
 
-        <section style="margin-top: 80px; text-align: center;">
-            <h2 style="color: var(--primary-cyan);">Contact Me</h2>
-            <p>Find me on <a href="https://github.com/selfitis" target="_blank" style="color: var(--primary-cyan);">My GitHub page</a> or reach me via email: <a href="mailto:vnmzsa@gmail.com" style="color: var(--primary-cyan);">vnmzsa@gmail.com</a></p>
-            <p>Other Connections:<a href="https://www.instagram.com/selfitis29/" target="_blank" style="color: var(--primary-cyan);">My Instagram</a> and <a href="https://www.youtube.com/@selfitiss" style="color: var(--primary-cyan);">Selfitis Youtube Channel</a></p>
+        <!-- Contact -->
+        <section class="reveal" style="margin-top: 80px; text-align: center;">
+            <p class="section-label">Get in touch</p>
+            <h2 class="section-title">Contact Me</h2>
+            <div class="contact-row">
+                <a href="https://github.com/selfitis" target="_blank" class="contact-chip">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.165c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.73.083-.73 1.205.085 1.84 1.236 1.84 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.42-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.468-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.3 1.23a11.5 11.5 0 013.003-.404c1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.652.242 2.873.12 3.176.77.84 1.232 1.91 1.232 3.22 0 4.61-2.807 5.625-5.48 5.92.43.372.823 1.102.823 2.222v3.293c0 .32.218.694.825.576C20.565 21.796 24 17.298 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                </a>
+                <a href="mailto:vnmzsa@gmail.com" class="contact-chip">
+                    ✉️ vnmzsa@gmail.com
+                </a>
+                <a href="https://www.instagram.com/selfitis29/" target="_blank" class="contact-chip">
+                    📸 Instagram
+                </a>
+                <a href="https://www.youtube.com/@selfitiss" target="_blank" class="contact-chip">
+                    ▶️ YouTube
+                </a>
+            </div>
         </section>
+
     </div>
 
-<footer>
-    <p>Designed by a visionary developer born in 2013..</p>
-</footer>
+    <footer>
+        <div class="footer-line"></div>
+        <p>Designed by a visionary developer born in 2013.</p>
+    </footer>
+
+</div>
+
+<script>
+    /* ── Scroll Reveal ── */
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+        });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => io.observe(el));
+
+    /* ── Mouse State ── */
+    let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    let smoothMouse = { x: mouse.x, y: mouse.y };
+    let ringPos = { x: mouse.x, y: mouse.y };
+
+    const spotlight = document.getElementById('spotlight');
+    const cursorDot = document.getElementById('cursorDot');
+    const cursorRing = document.getElementById('cursorRing');
+
+    document.addEventListener('mousemove', e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+
+    /* ── Orb Parallax (smooth) ── */
+    const orbs = [...document.querySelectorAll('.orb')];
+    const orbBase = orbs.map(orb => {
+        const r = orb.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    });
+
+    /* ── Canvas Particle Field ── */
+    const canvas = document.getElementById('bg-particle-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Connection-lines particle system
+    const PARTICLE_COUNT = 90;
+    const CONNECT_DIST   = 140;
+    const MOUSE_REPEL    = 120;
+    const COLORS = ['rgba(94,231,223,', 'rgba(180,144,202,', 'rgba(127,216,250,'];
+
+    class Dot {
+        constructor() { this.reset(true); }
+        reset(init = false) {
+            this.x  = Math.random() * canvas.width;
+            this.y  = init ? Math.random() * canvas.height : (Math.random() < 0.5 ? -10 : canvas.height + 10);
+            this.vx = (Math.random() - 0.5) * 0.4;
+            this.vy = (Math.random() - 0.5) * 0.4;
+            this.r  = Math.random() * 1.8 + 0.6;
+            this.alpha = Math.random() * 0.5 + 0.2;
+            this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+        }
+        update() {
+            // Mouse repel
+            const dx = this.x - smoothMouse.x;
+            const dy = this.y - smoothMouse.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < MOUSE_REPEL) {
+                const force = (MOUSE_REPEL - dist) / MOUSE_REPEL;
+                this.vx += (dx / dist) * force * 0.6;
+                this.vy += (dy / dist) * force * 0.6;
+            }
+            // Dampen
+            this.vx *= 0.97;
+            this.vy *= 0.97;
+            this.x += this.vx;
+            this.y += this.vy;
+            // Wrap
+            if (this.x < -20) this.x = canvas.width + 20;
+            if (this.x > canvas.width + 20) this.x = -20;
+            if (this.y < -20) this.y = canvas.height + 20;
+            if (this.y > canvas.height + 20) this.y = -20;
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+            ctx.fillStyle = this.color + this.alpha + ')';
+            ctx.fill();
+        }
+    }
+
+    const dots = Array.from({ length: PARTICLE_COUNT }, () => new Dot());
+
+    // Mouse-attracted extra glow dot
+    const glowDot = { x: mouse.x, y: mouse.y, trail: [] };
+
+    function drawConnections() {
+        for (let i = 0; i < dots.length; i++) {
+            for (let j = i + 1; j < dots.length; j++) {
+                const dx = dots[i].x - dots[j].x;
+                const dy = dots[i].y - dots[j].y;
+                const d  = Math.sqrt(dx * dx + dy * dy);
+                if (d < CONNECT_DIST) {
+                    const alpha = (1 - d / CONNECT_DIST) * 0.18;
+                    ctx.beginPath();
+                    ctx.moveTo(dots[i].x, dots[i].y);
+                    ctx.lineTo(dots[j].x, dots[j].y);
+                    ctx.strokeStyle = `rgba(94,231,223,${alpha})`;
+                    ctx.lineWidth = 0.7;
+                    ctx.stroke();
+                }
+            }
+            // Connect nearby dots to mouse
+            const mdx = dots[i].x - smoothMouse.x;
+            const mdy = dots[i].y - smoothMouse.y;
+            const md  = Math.sqrt(mdx * mdx + mdy * mdy);
+            if (md < CONNECT_DIST * 1.4) {
+                const alpha = (1 - md / (CONNECT_DIST * 1.4)) * 0.35;
+                ctx.beginPath();
+                ctx.moveTo(dots[i].x, dots[i].y);
+                ctx.lineTo(smoothMouse.x, smoothMouse.y);
+                ctx.strokeStyle = `rgba(94,231,223,${alpha})`;
+                ctx.lineWidth = 0.9;
+                ctx.stroke();
+            }
+        }
+    }
+
+    /* ── Main Animation Loop ── */
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    function tick() {
+        requestAnimationFrame(tick);
+
+        // Smooth mouse
+        smoothMouse.x = lerp(smoothMouse.x, mouse.x, 0.07);
+        smoothMouse.y = lerp(smoothMouse.y, mouse.y, 0.07);
+
+        // Ring lag
+        ringPos.x = lerp(ringPos.x, mouse.x, 0.12);
+        ringPos.y = lerp(ringPos.y, mouse.y, 0.12);
+
+        // Cursor elements
+        cursorDot.style.left  = mouse.x + 'px';
+        cursorDot.style.top   = mouse.y + 'px';
+        cursorRing.style.left = ringPos.x + 'px';
+        cursorRing.style.top  = ringPos.y + 'px';
+
+        // Spotlight
+        spotlight.style.left = smoothMouse.x + 'px';
+        spotlight.style.top  = smoothMouse.y + 'px';
+
+        // Orb parallax
+        orbs.forEach((orb, i) => {
+            const factor = (i + 1) * 0.018;
+            const cx = (smoothMouse.x / window.innerWidth  - 0.5) * window.innerWidth  * factor;
+            const cy = (smoothMouse.y / window.innerHeight - 0.5) * window.innerHeight * factor;
+            orb.style.transform = `translate(${cx}px, ${cy}px)`;
+        });
+
+        // Canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        dots.forEach(d => { d.update(); d.draw(); });
+        drawConnections();
+
+        // Mouse glow pulse on canvas
+        const grd = ctx.createRadialGradient(smoothMouse.x, smoothMouse.y, 0, smoothMouse.x, smoothMouse.y, 80);
+        grd.addColorStop(0, 'rgba(94,231,223,0.06)');
+        grd.addColorStop(1, 'transparent');
+        ctx.fillStyle = grd;
+        ctx.beginPath();
+        ctx.arc(smoothMouse.x, smoothMouse.y, 80, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    tick();
+
+    /* ── Click burst ── */
+    document.addEventListener('click', e => {
+        const count = 10;
+        for (let i = 0; i < count; i++) {
+            const el = document.createElement('div');
+            const angle = (i / count) * Math.PI * 2;
+            const dist  = 40 + Math.random() * 40;
+            const size  = 3 + Math.random() * 4;
+            const colors = ['#5ee7df', '#b490ca', '#7fd8fa', '#ffffff'];
+            el.style.cssText = `
+                position: fixed;
+                width: ${size}px;
+                height: ${size}px;
+                left: ${e.clientX}px;
+                top: ${e.clientY}px;
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9999;
+                background: ${colors[Math.floor(Math.random() * colors.length)]};
+                transform: translate(-50%, -50%);
+                animation: burstDot 0.7s ease-out forwards;
+                --ex: ${Math.cos(angle) * dist}px;
+                --ey: ${Math.sin(angle) * dist}px;
+            `;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 800);
+        }
+    });
+</script>
+
+<style>
+@keyframes burstDot {
+    0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--ex)), calc(-50% + var(--ey))) scale(0); }
+}
+</style>
 </body>
 </html>
