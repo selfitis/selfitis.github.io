@@ -869,10 +869,127 @@
     });
 </script>
 
+<!-- 1. STİL (CSS) ALANI -->
 <style>
-@keyframes burstDot {
-  0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  100% { opacity: 0; transform: translate(calc(-50% + var(--ex)), calc(-50% + var(--ey))) scale(0); }
+  @keyframes burstDot {
+    0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--ex)), calc(-50% + var(--ey))) scale(0); }
+  }
+
+  .donation-card {
+    position: relative;     /* Ön plana çıkabilmesi için şart */
+    z-index: 999999;        /* Tıklama efektinin En ÜSTÜNE çıkarır */
+    pointer-events: auto;   /* Tıklamaları tekrar aktif eder */
+
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-family: sans-serif;
 }
+
+  .donation-card input,
+  .donation-card select,
+  .donation-card button {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+
+  .donation-card button {
+    background-color: #5865F2; /* Discord Mavisi */
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+  }
+
+  .donation-card button:hover {
+    background-color: #4752C4;
+  }
+</style>
+
+<!-- 2. BAĞIŞ FORMU (HTML) ALANI -->
+<div class="donation-card">
+  <h2>🎁Donate with code</h2>
+
+  <label for="donorName">Name / Username:</label>
+  <input type="text" id="donorName" placeholder="Örn: Ahmet" required>
+
+  <label for="codeType">Code type:</label>
+  <select id="codeType">
+    <option value="Steam Cüzdan Kodu">Steam Wallet code</option>
+    <option value="Trendyol Hediye Çeki">Trendyol Hediye Çeki</option>
+    <option value="Google Play Kodu">Google Play Code</option>
+    <option value="Diğer">Other</option>
+  </select>
+
+  <label for="codeValue">Code info:</label>
+  <input type="text" id="codeValue" placeholder="XXXX-XXXX-XXXX" required>
+
+  <label for="donorNote">Add note (optional):</label>
+  <input type="text" id="donorNote" placeholder="Bir mesaj bırakın...">
+
+  <button onclick="sendDonation()">Send Donate</button>
+</div>
+
+<!-- 3. GÖNDERİM KODU (JAVASCRIPT) ALANI -->
+<script>
+async function sendDonation() {
+  // 🔴 Discord Webhook URL'inizi buraya yapıştırın:
+  const WEBHOOK_URL = "https://discord.com/api/webhooks/1529697187464745052/pHzGiN9P6PQTUh1AKAV7e5z4A5nqaFI6Z2lXzwEB0q6-Smnzuad-BroYZVAqCP-qiaHU";
+
+  const name = document.getElementById("donorName").value;
+  const type = document.getElementById("codeType").value;
+  const code = document.getElementById("codeValue").value;
+  const note = document.getElementById("donorNote").value || "Not bırakılmadı.";
+
+  if (!name || !code) {
+    alert("Please enter your name and the code in full.");
+    return;
+  }
+
+  const payload = {
+    username: "Donation Notification Bot",
+    avatar_url: "https://i.imgur.com/afw36fD.png",
+    embeds: [{
+      title: "🎉 A New Code Donation Has Arrived!",
+      color: 5814783,
+      fields: [
+        { name: "👤 Sender", value: name, inline: true },
+        { name: "🏷️ Code type", value: type, inline: true },
+        { name: "🔑 Code", value: `\`\`\`${code}\`\`\``, inline: false },
+        { name: "💬 Note", value: note, inline: false }
+      ],
+      timestamp: new Date().toISOString()
+    }]
+  };
+
+  try {
+    const response = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      alert("Your donation and code have been successfully submitted. Thank you!");
+      document.getElementById("donorName").value = "";
+      document.getElementById("codeValue").value = "";
+      document.getElementById("donorNote").value = "";
+    } else {
+      alert("An error occurred; please try again.");
+    }
+  } catch (error) {
+    console.error("Hata:", error);
+    alert("A technical error occurred during submission.");
+  }
+}
+</script>
 </body>
 </html>
