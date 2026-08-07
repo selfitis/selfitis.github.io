@@ -991,5 +991,25 @@ async function sendDonation() {
   }
 }
 </script>
+<script>
+window.addEventListener('message', function(e){
+  var d = e.data;
+  if(!d || d.source !== 'vision-gesture-control') return;
+  if(d.action === 'click'){
+    var x = d.xFrac * window.innerWidth;
+    var y = d.yFrac * window.innerHeight;
+    var el = document.elementFromPoint(x, y);
+    if(el){
+      el.dispatchEvent(new MouseEvent('mousedown',{bubbles:true,clientX:x,clientY:y}));
+      el.dispatchEvent(new MouseEvent('mouseup',{bubbles:true,clientX:x,clientY:y}));
+      if(typeof el.click === 'function') el.click();
+    }
+  } else if(d.action === 'scroll'){
+    window.scrollBy(0, d.deltaY);
+  } else if(d.action === 'nav'){
+    if(d.dir < 0) history.back(); else history.forward();
+  }
+});
+</script>
 </body>
 </html>
